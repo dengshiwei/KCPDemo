@@ -83,9 +83,13 @@ publishing {
         }
     }
 }
+
 ### 3. 核心组件
+
 #### 3.1 CommandLineProcessor
+
 处理插件传入参数：
+
 ```
 class DebugCommandLineProcessor : CommandLineProcessor {
     override val pluginId: String = "com.explore.debuglog.kcp"
@@ -94,7 +98,9 @@ class DebugCommandLineProcessor : CommandLineProcessor {
     )
 }
 ```
+
 #### 3.2 ComponentRegistrar
+
 注册编译期扩展，例如 IR Transformer：
 
 ```
@@ -112,6 +118,7 @@ class DebugLogComponentRegistrar(
 
 #### 3.3 IrGenerationExtension
 执行 IR 插码逻辑：
+
 ```
 class DebugLogIrGenerationExtension : IrGenerationExtension {
     override fun generate(moduleFragment: IrModuleFragment, pluginContext: IrPluginContext) {
@@ -121,18 +128,31 @@ class DebugLogIrGenerationExtension : IrGenerationExtension {
 ```
 
 ### 4. 插码示例：打印函数名
+
 ```
 class DebugLogTransformer(
     private val pluginContext: IrPluginContext
 ) : IrElementTransformerVoidWithContext() {
+   private val printlnSymbol: IrSimpleFunctionSymbol by lazy {
+        val printlnCallableId = CallableId(
+            packageName = FqName("kotlin.io"), // println 所在的包
+            callableName = Name.identifier("println")
+        )
+        val candidates = pluginContext.referenceFunctions(printlnCallableId)
 
+        val match = candidates.firstOrNull { symbol ->
+            val fn = symbol.owner
+            fn.valueParameters.size == 1 &&
+                    fn.valueParameters[0].type.classFqName == FqName("kotlin.Any")
+        } ?: error("没找到 println(Any?)，候选有：${candidates.map { it.owner.render() }}")
+
+        match
+    }
+    
     override fun visitFunctionNew(declaration: IrFunction): IrStatement {
         val body = declaration.body as? IrBlockBody ?: return super.visitFunctionNew(declaration)
 
         val builder = DeclarationIrBuilder(pluginContext, declaration.symbol)
-        val printlnSymbol = pluginContext.referenceFunctions(
-            CallableId(FqName("kotlin.io"), Name.identifier("println"))
-        ).first { it.owner.valueParameters.size == 1 }
 
         val logStatement = builder.irCall(printlnSymbol).apply {
             putValueArgument(0, builder.irString(">>> Entering function: ${declaration.name}"))
@@ -143,9 +163,11 @@ class DebugLogTransformer(
     }
 }
 ```
+
 这样，每个函数在运行时会打印自己的名称。
 
 ### 5. lib_plugin：Gradle 插件桥接
+
 ```
 class DebugLogGradleSubPlugin : KotlinCompilerPluginSupportPlugin {
     override fun getCompilerPluginId(): String = "com.explore.debuglog.kcp"
@@ -159,15 +181,20 @@ class DebugLogGradleSubPlugin : KotlinCompilerPluginSupportPlugin {
         }
 }
 ```
+
 在 plugins {} 中使用：
+
 ```
 plugins {
     id("com.explore.plugin") version "0.0.1"
 }
 ```
+
 ### 6. 调试方法
+
 在 Android Studio 默认运行中，插件日志可能不显示。
 推荐使用命令行 in-process 编译查看日志：
+
 ```
 ./gradlew :app:compileDebugKotlin \
   --stacktrace \
@@ -176,6 +203,7 @@ plugins {
 ```
 
 ### 7. 常见问题
+
 CommandLineProcessor 或 ComponentRegistrar 不执行
 
 - 确认 META-INF/services 正确：
@@ -196,6 +224,7 @@ IR API 差异
 K2 中部分方法（如 visitFunction、printlnSymbol）已废弃，需要改为 visitFunctionNew + referenceFunctions。
 
 ### 8. 总结
+
 KCP 开发流程：
 
 - 搭建 lib_kcp + lib_plugin 工程
