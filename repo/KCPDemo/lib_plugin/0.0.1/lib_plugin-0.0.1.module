@@ -1,0 +1,89 @@
+{
+  "formatVersion": "1.1",
+  "component": {
+    "group": "KCPDemo",
+    "module": "lib_plugin",
+    "version": "0.0.1",
+    "attributes": {
+      "org.gradle.status": "release"
+    }
+  },
+  "createdBy": {
+    "gradle": {
+      "version": "8.11.1"
+    }
+  },
+  "variants": [
+    {
+      "name": "apiElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.environment": "standard-jvm",
+        "org.gradle.jvm.version": 11,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-api",
+        "org.jetbrains.kotlin.platform.type": "jvm"
+      },
+      "dependencies": [
+        {
+          "group": "org.jetbrains.kotlin",
+          "module": "kotlin-stdlib",
+          "version": {
+            "requires": "2.0.21"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "lib_plugin-0.0.1.jar",
+          "url": "lib_plugin-0.0.1.jar",
+          "size": 8779,
+          "sha512": "5076eb2bdf52b674295a5c647974a80b791c335e4f436da23261d0616fa21ffd4c48856bc7b169d851aa046a394a7e4faf5ff2172062c160deaa58f393f11434",
+          "sha256": "6edcfa806a33a06e8810b3b706095e37871493d19ccb3fc17e3cc6011f3a4d2b",
+          "sha1": "2ab1dfa0a62b3d80560aa3e9bd833994ec0ca343",
+          "md5": "d54800a44cbe7c2c0f502dccae3031fe"
+        }
+      ]
+    },
+    {
+      "name": "runtimeElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.environment": "standard-jvm",
+        "org.gradle.jvm.version": 11,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-runtime",
+        "org.jetbrains.kotlin.platform.type": "jvm"
+      },
+      "dependencies": [
+        {
+          "group": "org.jetbrains.kotlin",
+          "module": "kotlin-gradle-plugin-api",
+          "version": {
+            "requires": "2.0.21"
+          }
+        },
+        {
+          "group": "org.jetbrains.kotlin",
+          "module": "kotlin-stdlib",
+          "version": {
+            "requires": "2.0.21"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "lib_plugin-0.0.1.jar",
+          "url": "lib_plugin-0.0.1.jar",
+          "size": 8779,
+          "sha512": "5076eb2bdf52b674295a5c647974a80b791c335e4f436da23261d0616fa21ffd4c48856bc7b169d851aa046a394a7e4faf5ff2172062c160deaa58f393f11434",
+          "sha256": "6edcfa806a33a06e8810b3b706095e37871493d19ccb3fc17e3cc6011f3a4d2b",
+          "sha1": "2ab1dfa0a62b3d80560aa3e9bd833994ec0ca343",
+          "md5": "d54800a44cbe7c2c0f502dccae3031fe"
+        }
+      ]
+    }
+  ]
+}
