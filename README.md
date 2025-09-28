@@ -83,6 +83,7 @@ publishing {
         }
     }
 }
+```
 
 ### 3. 核心组件
 
@@ -207,6 +208,7 @@ plugins {
 CommandLineProcessor 或 ComponentRegistrar 不执行
 
 - 确认 META-INF/services 正确：
+
 ```
 org.jetbrains.kotlin.compiler.plugin.CommandLineProcessor
 org.jetbrains.kotlin.compiler.plugin.CompilerPluginRegistrar
@@ -214,14 +216,11 @@ referenceFunctions 找不到函数
 ```
 
 - K2 下需要用 CallableId + 手动筛选参数：
+
 ```
 symbol.owner.valueParameters.size == 1 &&
 symbol.owner.valueParameters[0].type.classFqName == FqName("kotlin.Any")
 ```
-
-IR API 差异
-
-K2 中部分方法（如 visitFunction、printlnSymbol）已废弃，需要改为 visitFunctionNew + referenceFunctions。
 
 ### 8. 总结
 
